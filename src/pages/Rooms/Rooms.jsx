@@ -11,7 +11,8 @@ import {
   FireIcon,
   CakeIcon,
   TruckIcon,
-  KeyIcon
+  KeyIcon,
+  PhotoIcon
 } from "@heroicons/react/24/solid";
 import {
   Card,
@@ -35,7 +36,8 @@ import {
   Select,
   Option,
   Textarea,
-  Switch
+  Switch,
+  Carousel
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 
@@ -75,7 +77,32 @@ const WING_OPTIONS = ["North", "South", "East", "West"];
 const VIEW_TYPES = ["City View", "Garden View", "Pool View", "Sea View", "Mountain View"];
 const BED_TYPES = ["King", "Queen", "Double", "Single", "Twin"];
 
-const TABLE_HEAD = ["Room #", "Type", "Floor/Wing", "Status", "Capacity", "Amenities", "Current Guest", "Actions"];
+const TABLE_HEAD = ["Room #", "Type", "Floor/Wing", "Status", "Capacity", "Amenities", "Current Guest", "Photos", "Actions"];
+
+// Sample room images (in production, these would be actual uploaded images)
+const SAMPLE_ROOM_IMAGES = {
+  standard: [
+    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+    "https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+  ],
+  deluxe: [
+    "https://images.unsplash.com/photo-1566665797739-1674de7a421a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
+    "https://images.unsplash.com/photo-1590490360182-c33d5773345b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80"
+  ],
+  executive: [
+    "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+    "https://images.unsplash.com/photo-1617098474202-0d0d7f60c6b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+  ],
+  suite: [
+    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+  ],
+  presidential: [
+    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+  ]
+};
 
 const initialRooms = [
   {
@@ -91,6 +118,7 @@ const initialRooms = [
     size: "25m²",
     price: 100,
     amenities: ["WiFi", "TV", "AC", "Mini Bar"],
+    images: SAMPLE_ROOM_IMAGES.standard,
     currentGuest: {
       name: "John Michael",
       checkIn: "2024-03-15",
@@ -114,6 +142,7 @@ const initialRooms = [
     size: "25m²",
     price: 100,
     amenities: ["WiFi", "TV", "AC"],
+    images: SAMPLE_ROOM_IMAGES.standard.slice(0, 2),
     currentGuest: null,
     lastCleaned: "2024-03-16",
     nextMaintenance: "2024-04-15",
@@ -132,6 +161,7 @@ const initialRooms = [
     size: "35m²",
     price: 150,
     amenities: ["WiFi", "TV", "AC", "Mini Bar", "Balcony"],
+    images: SAMPLE_ROOM_IMAGES.deluxe,
     currentGuest: null,
     lastCleaned: "2024-03-16",
     nextMaintenance: "2024-04-20",
@@ -150,6 +180,7 @@ const initialRooms = [
     size: "35m²",
     price: 150,
     amenities: ["WiFi", "TV", "AC", "Mini Bar", "Balcony"],
+    images: SAMPLE_ROOM_IMAGES.deluxe,
     currentGuest: null,
     lastCleaned: "2024-03-14",
     nextMaintenance: "2024-03-20",
@@ -168,6 +199,7 @@ const initialRooms = [
     size: "45m²",
     price: 200,
     amenities: ["WiFi", "TV", "AC", "Mini Bar", "Balcony", "Work Desk"],
+    images: SAMPLE_ROOM_IMAGES.executive,
     currentGuest: {
       name: "Alexa Liras",
       checkIn: "2024-03-10",
@@ -191,6 +223,7 @@ const initialRooms = [
     size: "65m²",
     price: 300,
     amenities: ["WiFi", "TV", "AC", "Mini Bar", "Balcony", "Living Area", "Jacuzzi"],
+    images: SAMPLE_ROOM_IMAGES.suite,
     currentGuest: null,
     expectedArrival: "2024-03-20",
     lastCleaned: "2024-03-16",
@@ -210,6 +243,7 @@ const initialRooms = [
     size: "100m²",
     price: 500,
     amenities: ["WiFi", "TV", "AC", "Mini Bar", "Balcony", "Living Area", "Dining Area", "Jacuzzi", "Kitchen"],
+    images: SAMPLE_ROOM_IMAGES.presidential,
     currentGuest: null,
     lastCleaned: "2024-03-16",
     nextMaintenance: "2024-05-10",
@@ -228,6 +262,7 @@ const initialRooms = [
     size: "25m²",
     price: 100,
     amenities: ["WiFi", "TV", "AC"],
+    images: SAMPLE_ROOM_IMAGES.standard.slice(0, 1),
     currentGuest: null,
     lastCleaned: "2024-03-16",
     nextMaintenance: "2024-04-18",
@@ -240,6 +275,7 @@ export function Rooms() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [openDialog, setOpenDialog] = useState(false);
+  const [openPhotoDialog, setOpenPhotoDialog] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [dialogMode, setDialogMode] = useState("add"); // 'add', 'edit', 'view', 'maintenance'
   const [newRoom, setNewRoom] = useState({
@@ -252,6 +288,7 @@ export function Rooms() {
     status: "available",
     price: 100,
     amenities: [],
+    images: [],
     issues: [],
     lastCleaned: new Date().toISOString().split('T')[0],
     nextMaintenance: "",
@@ -303,6 +340,7 @@ export function Rooms() {
         status: "available",
         price: 100,
         amenities: [],
+        images: [],
         issues: [],
         lastCleaned: new Date().toISOString().split('T')[0],
         nextMaintenance: "",
@@ -311,8 +349,18 @@ export function Rooms() {
     setOpenDialog(true);
   };
 
+  const handleOpenPhotoDialog = (room) => {
+    setSelectedRoom(room);
+    setOpenPhotoDialog(true);
+  };
+
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    setSelectedRoom(null);
+  };
+
+  const handleClosePhotoDialog = () => {
+    setOpenPhotoDialog(false);
     setSelectedRoom(null);
   };
 
@@ -327,6 +375,7 @@ export function Rooms() {
       size: roomType.size,
       price: roomType.basePrice,
       amenities: newRoom.amenities,
+      images: newRoom.images.length > 0 ? newRoom.images : SAMPLE_ROOM_IMAGES[newRoom.type],
       currentGuest: null,
     };
     
@@ -373,6 +422,22 @@ export function Rooms() {
             issues: room.issues.filter((_, i) => i !== issueIndex),
             status: room.issues.length === 1 ? "available" : room.status
           }
+        : room
+    ));
+  };
+
+  const handleAddImage = (roomId, imageUrl) => {
+    setRooms(rooms.map(room =>
+      room.id === roomId
+        ? { ...room, images: [...room.images, imageUrl] }
+        : room
+    ));
+  };
+
+  const handleRemoveImage = (roomId, imageIndex) => {
+    setRooms(rooms.map(room =>
+      room.id === roomId
+        ? { ...room, images: room.images.filter((_, i) => i !== imageIndex) }
         : room
     ));
   };
@@ -650,6 +715,40 @@ export function Rooms() {
                       )}
                     </td>
                     <td className={classes}>
+                      <div className="flex items-center gap-2">
+                        {room.images && room.images.length > 0 ? (
+                          <div className="flex -space-x-2">
+                            {room.images.slice(0, 3).map((img, i) => (
+                              <Tooltip key={i} content={`Photo ${i + 1}`}>
+                                <Avatar
+                                  src={img}
+                                  size="sm"
+                                  className="border-2 border-white hover:z-10 cursor-pointer"
+                                  onClick={() => handleOpenPhotoDialog(room)}
+                                />
+                              </Tooltip>
+                            ))}
+                            {room.images.length > 3 && (
+                              <Tooltip content={`+${room.images.length - 3} more`}>
+                                <div 
+                                  className="w-8 h-8 rounded-full bg-blue-gray-500 flex items-center justify-center text-white text-xs font-bold border-2 border-white cursor-pointer hover:z-10"
+                                  onClick={() => handleOpenPhotoDialog(room)}
+                                >
+                                  +{room.images.length - 3}
+                                </div>
+                              </Tooltip>
+                            )}
+                          </div>
+                        ) : (
+                          <Tooltip content="No photos">
+                            <IconButton variant="text" color="gray" size="sm">
+                              <PhotoIcon className="h-4 w-4" />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                      </div>
+                    </td>
+                    <td className={classes}>
                       <div className="flex gap-2">
                         {room.status === "available" && (
                           <Tooltip content="Mark as Occupied">
@@ -735,7 +834,7 @@ export function Rooms() {
       </Card>
 
       {/* Room Dialog */}
-      <Dialog open={openDialog} handler={handleCloseDialog} size={dialogMode === "view" ? "md" : "lg"}>
+      <Dialog open={openDialog} handler={handleCloseDialog} size={dialogMode === "view" ? "lg" : "lg"}>
         <DialogHeader>
           {dialogMode === "add" && "Add New Room"}
           {dialogMode === "edit" && "Edit Room"}
@@ -747,6 +846,35 @@ export function Rooms() {
             {dialogMode === "view" && selectedRoom ? (
               // View Mode
               <div className="space-y-6">
+                {/* Photo Gallery Section */}
+                {selectedRoom.images && selectedRoom.images.length > 0 && (
+                  <div className="mb-6">
+                    <Typography variant="h6" color="blue-gray" className="mb-4">Room Photos</Typography>
+                    <Carousel className="rounded-xl overflow-hidden h-64">
+                      {selectedRoom.images.map((img, index) => (
+                        <img
+                          key={index}
+                          src={img}
+                          alt={`Room ${selectedRoom.roomNumber} - ${index + 1}`}
+                          className="h-full w-full object-cover"
+                        />
+                      ))}
+                    </Carousel>
+                    <div className="flex mt-2 justify-center gap-1">
+                      {selectedRoom.images.map((img, index) => (
+                        <Avatar
+                          key={index}
+                          src={img}
+                          size="sm"
+                          variant="rounded"
+                          className="cursor-pointer hover:opacity-80"
+                          onClick={() => {/* Could implement thumbnail navigation */}}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex items-center justify-between">
                   <div>
                     <Typography variant="h4">Room {selectedRoom.roomNumber}</Typography>
@@ -870,6 +998,120 @@ export function Rooms() {
             ) : (
               // Add/Edit Mode
               <div className="space-y-6">
+                {/* Photo Upload Section for Add/Edit */}
+                {dialogMode !== "view" && (
+                  <div className="mb-6">
+                    <Typography variant="h6" color="blue-gray" className="mb-4">Room Photos</Typography>
+                    
+                    {/* Display existing photos */}
+                    {(dialogMode === "edit" && selectedRoom?.images?.length > 0) && (
+                      <div className="mb-4">
+                        <Typography variant="small" color="gray" className="mb-2">Current Photos:</Typography>
+                        <div className="flex gap-2 flex-wrap">
+                          {selectedRoom.images.map((img, index) => (
+                            <div key={index} className="relative group">
+                              <Avatar
+                                src={img}
+                                size="xl"
+                                variant="rounded"
+                                className="border-2 border-gray-200"
+                              />
+                              <IconButton
+                                size="sm"
+                                color="red"
+                                className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                onClick={() => handleRemoveImage(selectedRoom.id, index)}
+                              >
+                                <XCircleIcon className="h-4 w-4" />
+                              </IconButton>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Add new photo input */}
+                    <div className="flex gap-2">
+                      <Input
+                        label="Image URL"
+                        placeholder="Enter image URL"
+                        className="flex-1"
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter') {
+                            const input = e.target;
+                            if (input.value) {
+                              if (dialogMode === "edit" && selectedRoom) {
+                                handleAddImage(selectedRoom.id, input.value);
+                              } else {
+                                setNewRoom({
+                                  ...newRoom,
+                                  images: [...newRoom.images, input.value]
+                                });
+                              }
+                              input.value = '';
+                            }
+                          }
+                        }}
+                      />
+                      <Button
+                        size="sm"
+                        variant="outlined"
+                        onClick={() => {
+                          const input = document.querySelector('input[placeholder="Enter image URL"]');
+                          if (input && input.value) {
+                            if (dialogMode === "edit" && selectedRoom) {
+                              handleAddImage(selectedRoom.id, input.value);
+                            } else {
+                              setNewRoom({
+                                ...newRoom,
+                                images: [...newRoom.images, input.value]
+                              });
+                            }
+                            input.value = '';
+                          }
+                        }}
+                      >
+                        Add Photo
+                      </Button>
+                    </div>
+                    <Typography variant="small" color="gray" className="mt-1">
+                      Press Enter or click Add Photo to add image URL
+                    </Typography>
+
+                    {/* Preview for new images in add mode */}
+                    {dialogMode === "add" && newRoom.images.length > 0 && (
+                      <div className="mt-4">
+                        <Typography variant="small" color="gray" className="mb-2">New Photos:</Typography>
+                        <div className="flex gap-2 flex-wrap">
+                          {newRoom.images.map((img, index) => (
+                            <div key={index} className="relative group">
+                              <Avatar
+                                src={img}
+                                size="xl"
+                                variant="rounded"
+                                className="border-2 border-gray-200"
+                              />
+                              <IconButton
+                                size="sm"
+                                color="red"
+                                className="absolute -top-2 -right-2"
+                                onClick={() => {
+                                  setNewRoom({
+                                    ...newRoom,
+                                    images: newRoom.images.filter((_, i) => i !== index)
+                                  });
+                                }}
+                              >
+                                <XCircleIcon className="h-4 w-4" />
+                              </IconButton>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="grid grid-cols-2 gap-4">
                   <Input 
                     label="Room Number" 
@@ -965,18 +1207,32 @@ export function Rooms() {
                         <Switch
                           id={`amenity-${amenity}`}
                           ripple={false}
-                          checked={newRoom.amenities.includes(amenity)}
+                          checked={
+                            dialogMode === "edit" 
+                              ? selectedRoom?.amenities.includes(amenity)
+                              : newRoom.amenities.includes(amenity)
+                          }
                           onChange={(e) => {
-                            if (e.target.checked) {
-                              setNewRoom({
-                                ...newRoom,
-                                amenities: [...newRoom.amenities, amenity]
-                              });
+                            if (dialogMode === "edit" && selectedRoom) {
+                              const updatedRoom = { ...selectedRoom };
+                              if (e.target.checked) {
+                                updatedRoom.amenities = [...selectedRoom.amenities, amenity];
+                              } else {
+                                updatedRoom.amenities = selectedRoom.amenities.filter(a => a !== amenity);
+                              }
+                              setSelectedRoom(updatedRoom);
                             } else {
-                              setNewRoom({
-                                ...newRoom,
-                                amenities: newRoom.amenities.filter(a => a !== amenity)
-                              });
+                              if (e.target.checked) {
+                                setNewRoom({
+                                  ...newRoom,
+                                  amenities: [...newRoom.amenities, amenity]
+                                });
+                              } else {
+                                setNewRoom({
+                                  ...newRoom,
+                                  amenities: newRoom.amenities.filter(a => a !== amenity)
+                                });
+                              }
                             }
                           }}
                         />
@@ -993,13 +1249,25 @@ export function Rooms() {
                       label="Last Cleaned Date" 
                       type="date"
                       value={dialogMode === "edit" ? selectedRoom?.lastCleaned : newRoom.lastCleaned}
-                      onChange={(e) => setNewRoom({...newRoom, lastCleaned: e.target.value})}
+                      onChange={(e) => {
+                        if (dialogMode === "edit" && selectedRoom) {
+                          setSelectedRoom({...selectedRoom, lastCleaned: e.target.value});
+                        } else {
+                          setNewRoom({...newRoom, lastCleaned: e.target.value});
+                        }
+                      }}
                     />
                     <Input 
                       label="Next Maintenance Date" 
                       type="date"
                       value={dialogMode === "edit" ? selectedRoom?.nextMaintenance : newRoom.nextMaintenance}
-                      onChange={(e) => setNewRoom({...newRoom, nextMaintenance: e.target.value})}
+                      onChange={(e) => {
+                        if (dialogMode === "edit" && selectedRoom) {
+                          setSelectedRoom({...selectedRoom, nextMaintenance: e.target.value});
+                        } else {
+                          setNewRoom({...newRoom, nextMaintenance: e.target.value});
+                        }
+                      }}
                     />
                   </div>
                 </div>
@@ -1043,6 +1311,87 @@ export function Rooms() {
               {dialogMode === "add" ? "Add Room" : "Save Changes"}
             </Button>
           )}
+        </DialogFooter>
+      </Dialog>
+
+      {/* Photo Gallery Dialog */}
+      <Dialog open={openPhotoDialog} handler={handleClosePhotoDialog} size="xl">
+        <DialogHeader className="flex items-center justify-between">
+          <div>
+            <Typography variant="h5">
+              Room {selectedRoom?.roomNumber} - {ROOM_TYPES.find(t => t.value === selectedRoom?.type)?.label}
+            </Typography>
+            <Typography variant="small" color="gray">
+              {selectedRoom?.images?.length || 0} photos
+            </Typography>
+          </div>
+          <IconButton variant="text" color="gray" onClick={handleClosePhotoDialog}>
+            <XCircleIcon className="h-5 w-5" />
+          </IconButton>
+        </DialogHeader>
+        <DialogBody divider className="max-h-[70vh] overflow-scroll">
+          {selectedRoom && selectedRoom.images && selectedRoom.images.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {selectedRoom.images.map((img, index) => (
+                <div key={index} className="relative group">
+                  <img
+                    src={img}
+                    alt={`Room ${selectedRoom.roomNumber} - ${index + 1}`}
+                    className="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                    onClick={() => window.open(img, '_blank')}
+                  />
+                  <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Tooltip content="Delete photo">
+                      <IconButton
+                        size="sm"
+                        color="red"
+                        onClick={() => handleRemoveImage(selectedRoom.id, index)}
+                      >
+                        <XCircleIcon className="h-4 w-4" />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <PhotoIcon className="h-16 w-16 mx-auto text-gray-400" />
+              <Typography variant="h6" color="gray" className="mt-4">
+                No photos available for this room
+              </Typography>
+            </div>
+          )}
+        </DialogBody>
+        <DialogFooter>
+          <div className="flex gap-2 w-full">
+            <Input
+              label="Add new photo URL"
+              placeholder="https://example.com/photo.jpg"
+              className="flex-1"
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' && selectedRoom) {
+                  const input = e.target;
+                  if (input.value) {
+                    handleAddImage(selectedRoom.id, input.value);
+                    input.value = '';
+                  }
+                }
+              }}
+            />
+            <Button
+              color="green"
+              onClick={() => {
+                const input = document.querySelector('input[placeholder="Add new photo URL"]');
+                if (input && input.value && selectedRoom) {
+                  handleAddImage(selectedRoom.id, input.value);
+                  input.value = '';
+                }
+              }}
+            >
+              Add Photo
+            </Button>
+          </div>
         </DialogFooter>
       </Dialog>
     </>

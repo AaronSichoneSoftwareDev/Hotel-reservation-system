@@ -11,7 +11,7 @@ export const ordersOverviewData = [
   {
     icon: BellIcon,
     color: "text-blue-gray-300",
-    title: "$2400, Design changes",
+    title: "ZMK2400, Design changes",
     description: "22 DEC 7:20 PM",
   },
   {

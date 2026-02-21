@@ -37,15 +37,15 @@ import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import { StatisticsCard } from "@/widgets/cards";
 import { StatisticsChart } from "@/widgets/charts";
 
-// Mock room performance data
+// Mock room performance data (converted to ZMK)
 const roomPerformanceData = [
   { 
     type: "Standard Room", 
     code: "standard",
     totalRooms: 20,
     booked: 18,
-    revenue: 54000,
-    avgPrice: 100,
+    revenue: 54000 * 21, // Converted to ZMK (approx rate)
+    avgPrice: 100 * 21,
     occupancyRate: 90,
     trend: "+5%",
     popular: true,
@@ -55,8 +55,8 @@ const roomPerformanceData = [
     code: "deluxe",
     totalRooms: 15,
     booked: 12,
-    revenue: 54000,
-    avgPrice: 150,
+    revenue: 54000 * 21,
+    avgPrice: 150 * 21,
     occupancyRate: 80,
     trend: "+2%",
     popular: true,
@@ -66,8 +66,8 @@ const roomPerformanceData = [
     code: "executive",
     totalRooms: 10,
     booked: 7,
-    revenue: 42000,
-    avgPrice: 200,
+    revenue: 42000 * 21,
+    avgPrice: 200 * 21,
     occupancyRate: 70,
     trend: "-3%",
     popular: false,
@@ -77,8 +77,8 @@ const roomPerformanceData = [
     code: "suite",
     totalRooms: 5,
     booked: 4,
-    revenue: 36000,
-    avgPrice: 300,
+    revenue: 36000 * 21,
+    avgPrice: 300 * 21,
     occupancyRate: 80,
     trend: "+8%",
     popular: true,
@@ -88,51 +88,51 @@ const roomPerformanceData = [
     code: "presidential",
     totalRooms: 2,
     booked: 1,
-    revenue: 15000,
-    avgPrice: 500,
+    revenue: 15000 * 21,
+    avgPrice: 500 * 21,
     occupancyRate: 50,
     trend: "-10%",
     popular: false,
   },
 ];
 
-// Mock seasonal data
+// Mock seasonal data (converted to ZMK)
 const seasonalData = [
-  { month: "January", occupancy: 65, revenue: 145000, events: "New Year, Low Season" },
-  { month: "February", occupancy: 70, revenue: 158000, events: "Valentine's Day" },
-  { month: "March", occupancy: 82, revenue: 185000, events: "Spring Break" },
-  { month: "April", occupancy: 85, revenue: 192000, events: "Easter Holiday" },
-  { month: "May", occupancy: 78, revenue: 176000, events: "Mother's Day" },
-  { month: "June", occupancy: 92, revenue: 245000, events: "Summer Start, Weddings" },
-  { month: "July", occupancy: 95, revenue: 268000, events: "Peak Summer, Independence Day" },
-  { month: "August", occupancy: 94, revenue: 258000, events: "Summer Peak" },
-  { month: "September", occupancy: 75, revenue: 169000, events: "Back to School" },
-  { month: "October", occupancy: 72, revenue: 162000, events: "Fall Season" },
-  { month: "November", occupancy: 68, revenue: 154000, events: "Thanksgiving, Low Season" },
-  { month: "December", occupancy: 85, revenue: 210000, events: "Christmas, New Year Eve" },
+  { month: "January", occupancy: 65, revenue: 145000 * 21, events: "New Year, Low Season" },
+  { month: "February", occupancy: 70, revenue: 158000 * 21, events: "Valentine's Day" },
+  { month: "March", occupancy: 82, revenue: 185000 * 21, events: "Spring Break" },
+  { month: "April", occupancy: 85, revenue: 192000 * 21, events: "Easter Holiday" },
+  { month: "May", occupancy: 78, revenue: 176000 * 21, events: "Mother's Day" },
+  { month: "June", occupancy: 92, revenue: 245000 * 21, events: "Summer Start, Weddings" },
+  { month: "July", occupancy: 95, revenue: 268000 * 21, events: "Peak Summer, Independence Day" },
+  { month: "August", occupancy: 94, revenue: 258000 * 21, events: "Summer Peak" },
+  { month: "September", occupancy: 75, revenue: 169000 * 21, events: "Back to School" },
+  { month: "October", occupancy: 72, revenue: 162000 * 21, events: "Fall Season" },
+  { month: "November", occupancy: 68, revenue: 154000 * 21, events: "Thanksgiving, Low Season" },
+  { month: "December", occupancy: 85, revenue: 210000 * 21, events: "Christmas, New Year Eve" },
 ];
 
-// Mock booking trends by day of week
+// Mock booking trends by day of week (converted to ZMK)
 const dayOfWeekData = [
-  { day: "Monday", occupancy: 65, avgRate: 145 },
-  { day: "Tuesday", occupancy: 62, avgRate: 142 },
-  { day: "Wednesday", occupancy: 68, avgRate: 148 },
-  { day: "Thursday", occupancy: 75, avgRate: 165 },
-  { day: "Friday", occupancy: 92, avgRate: 210 },
-  { day: "Saturday", occupancy: 95, avgRate: 225 },
-  { day: "Sunday", occupancy: 78, avgRate: 170 },
+  { day: "Monday", occupancy: 65, avgRate: 145 * 21 },
+  { day: "Tuesday", occupancy: 62, avgRate: 142 * 21 },
+  { day: "Wednesday", occupancy: 68, avgRate: 148 * 21 },
+  { day: "Thursday", occupancy: 75, avgRate: 165 * 21 },
+  { day: "Friday", occupancy: 92, avgRate: 210 * 21 },
+  { day: "Saturday", occupancy: 95, avgRate: 225 * 21 },
+  { day: "Sunday", occupancy: 78, avgRate: 170 * 21 },
 ];
 
 export function Home() {
   const [selectedPeriod, setSelectedPeriod] = useState("month");
   const [roomTypeFilter, setRoomTypeFilter] = useState("all");
   const [profitData, setProfitData] = useState({
-    revenue: 245000,
-    costs: 168000,
-    profit: 77000,
+    revenue: 245000 * 21,
+    costs: 168000 * 21,
+    profit: 77000 * 21,
     occupancyRate: 78,
-    avgDailyRate: 185,
-    revPAR: 144.3,
+    avgDailyRate: 185 * 21,
+    revPAR: 144.3 * 21,
   });
 
   useEffect(() => {
@@ -140,8 +140,8 @@ export function Home() {
   }, [selectedPeriod]);
 
   const calculateProfitMetrics = () => {
-    const totalRevenue = 245000;
-    const totalCosts = 168000;
+    const totalRevenue = 245000 * 21;
+    const totalCosts = 168000 * 21;
     const profit = totalRevenue - totalCosts;
     const profitMargin = (profit / totalRevenue) * 100;
 
@@ -151,8 +151,8 @@ export function Home() {
       profit: profit,
       profitMargin: profitMargin.toFixed(1),
       occupancyRate: 78,
-      avgDailyRate: 185,
-      revPAR: 144.3,
+      avgDailyRate: 185 * 21,
+      revPAR: 144.3 * 21,
     });
   };
 
@@ -173,7 +173,7 @@ export function Home() {
   const totalBooked = roomPerformanceData.reduce((sum, room) => sum + room.booked, 0);
   const overallOccupancy = ((totalBooked / totalRooms) * 100).toFixed(1);
 
-  // Revenue opportunities based on room performance
+  // Revenue opportunities based on room performance (converted to ZMK)
   const roomOpportunities = roomPerformanceData
     .filter(room => room.occupancyRate < 75)
     .map(room => ({
@@ -182,6 +182,11 @@ export function Home() {
       recommendedAction: room.occupancyRate < 60 ? "Price reduction & promotion" : "Bundle with services",
       potentialRevenue: Math.round(room.totalRooms * (85 - room.occupancyRate) / 100 * room.avgPrice * 30),
     }));
+
+  // Format ZMK currency
+  const formatZMK = (amount) => {
+    return `ZMK ${Math.round(amount).toLocaleString()}`;
+  };
 
   return (
     <div className="mt-12">
@@ -216,26 +221,26 @@ export function Home() {
           {
             icon: CurrencyDollarIcon,
             title: "Total Revenue",
-            value: `$${profitData.revenue.toLocaleString()}`,
+            value: formatZMK(profitData.revenue),
             footer: { color: "text-green-500", value: "+12.5%", label: "vs last month" },
           },
           {
             icon: HomeModernIcon,
             title: "Total Costs",
-            value: `$${profitData.costs.toLocaleString()}`,
+            value: formatZMK(profitData.costs),
             footer: { color: "text-red-500", value: "+5.2%", label: "vs last month" },
           },
           {
             icon: SparklesIcon,
             title: "Net Profit",
-            value: `$${profitData.profit.toLocaleString()}`,
+            value: formatZMK(profitData.profit),
             footer: { color: "text-green-500", value: `${profitData.profitMargin}%`, label: "margin" },
           },
           {
             icon: UserGroupIcon,
             title: "Occupancy Rate",
             value: `${profitData.occupancyRate}%`,
-            footer: { color: "text-blue-500", value: "RevPAR", label: `$${profitData.revPAR}` },
+            footer: { color: "text-blue-500", value: "RevPAR", label: formatZMK(profitData.revPAR) },
           },
         ].map(({ icon, title, value, footer }) => (
           <StatisticsCard
@@ -291,7 +296,7 @@ export function Home() {
                   {mostBookedRoom.type}
                 </Typography>
                 <Typography variant="small" color="gray">
-                  {mostBookedRoom.occupancyRate}% occupancy • ${mostBookedRoom.avgPrice}/night
+                  {mostBookedRoom.occupancyRate}% occupancy • {formatZMK(mostBookedRoom.avgPrice)}/night
                 </Typography>
               </Card>
               
@@ -314,7 +319,7 @@ export function Home() {
                   Revenue by Room Type
                 </Typography>
                 <Typography variant="h5" color="blue-gray">
-                  ${roomPerformanceData.reduce((sum, r) => sum + r.revenue, 0).toLocaleString()}
+                  {formatZMK(roomPerformanceData.reduce((sum, r) => sum + r.revenue, 0))}
                 </Typography>
                 <Typography variant="small" color="gray">
                   Highest: {mostBookedRoom.type}
@@ -390,12 +395,12 @@ export function Home() {
                         </td>
                         <td className="py-3 px-4">
                           <Typography variant="small" color="blue-gray">
-                            ${room.avgPrice}
+                            {formatZMK(room.avgPrice)}
                           </Typography>
                         </td>
                         <td className="py-3 px-4">
                           <Typography variant="small" color="blue-gray" className="font-bold">
-                            ${room.revenue.toLocaleString()}
+                            {formatZMK(room.revenue)}
                           </Typography>
                         </td>
                         <td className="py-3 px-4">
@@ -456,7 +461,7 @@ export function Home() {
                         {month.occupancy}%
                       </Typography>
                       <Typography variant="small" color="green" className="font-medium">
-                        ${month.revenue.toLocaleString()}
+                        {formatZMK(month.revenue)}
                       </Typography>
                     </div>
                   </div>
@@ -473,7 +478,7 @@ export function Home() {
                     <div className="absolute top-0 left-0 w-full h-full flex">
                       <div 
                         className="h-full bg-green-500/20" 
-                        style={{ width: `${(month.revenue / 268000) * 100}%` }}
+                        style={{ width: `${(month.revenue / (268000 * 21)) * 100}%` }}
                       />
                     </div>
                   </div>
@@ -515,7 +520,7 @@ export function Home() {
                         {month.occupancy}%
                       </Typography>
                       <Typography variant="small" color="green">
-                        ${month.revenue.toLocaleString()}
+                        {formatZMK(month.revenue)}
                       </Typography>
                     </div>
                   </div>
@@ -545,7 +550,7 @@ export function Home() {
                         {month.occupancy}%
                       </Typography>
                       <Typography variant="small" color="amber">
-                        ${month.revenue.toLocaleString()}
+                        {formatZMK(month.revenue)}
                       </Typography>
                     </div>
                   </div>
@@ -609,7 +614,7 @@ export function Home() {
                     {day.occupancy}%
                   </Typography>
                   <Typography variant="small" color="gray">
-                    ${day.avgRate}
+                    {formatZMK(day.avgRate)}
                   </Typography>
                 </div>
               ))}
@@ -648,7 +653,7 @@ export function Home() {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <Typography variant="small" color="gray">Current Rate</Typography>
-                      <Typography variant="small" color="blue-gray">${opportunity.currentRate}</Typography>
+                      <Typography variant="small" color="blue-gray">{formatZMK(opportunity.currentRate)}</Typography>
                     </div>
                     <div className="flex justify-between">
                       <Typography variant="small" color="gray">Recommended</Typography>
@@ -659,7 +664,7 @@ export function Home() {
                     <div className="flex justify-between">
                       <Typography variant="small" color="gray">Potential Revenue</Typography>
                       <Typography variant="small" color="green" className="font-bold">
-                        +${opportunity.potentialRevenue.toLocaleString()}/mo
+                        +{formatZMK(opportunity.potentialRevenue)}/mo
                       </Typography>
                     </div>
                   </div>

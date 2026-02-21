@@ -13,7 +13,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavColor, sidenavType, openSidenav } = controller;
   const sidenavTypes = {
-    dark: "bg-gradient-to-br from-gray-800 to-gray-900",
+    dark: "bg-gradient-to-br from-gray-600 to-gray-600",
     white: "bg-white shadow-sm",
     transparent: "bg-transparent",
   };
@@ -29,7 +29,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
       >
         <Link to="/" className="py-6 px-8 text-center">
           <Typography
-            variant="h6"
+            variant="h1"
             color={sidenavType === "dark" ? "white" : "blue-gray"}
           >
             {brandName}
@@ -65,15 +65,11 @@ export function Sidenav({ brandImg, brandName, routes }) {
                 <NavLink to={`/${layout}${path}`}>
                   {({ isActive }) => (
                     <Button
-                      variant={isActive ? "gradient" : "text"}
-                      color={
-                        isActive
-                          ? sidenavColor
-                          : sidenavType === "dark"
-                          ? "white"
-                          : "blue-gray"
-                      }
-                      className="flex items-center gap-4 px-4 capitalize"
+                      variant= "text"
+                      color={sidenavType === "dark" ? "white" : "blue-gray"}
+                     className={`flex items-center gap-4 px-4 capitalize ${
+                       isActive ? "bg-gray-300 text-gray-900" : ""
+                      }`}
                       fullWidth
                     >
                       {icon}
@@ -97,7 +93,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
 
 Sidenav.defaultProps = {
   brandImg: "/img/logo-ct.png",
-  brandName: "Material Tailwind React",
+  brandName: "RMS",
 };
 
 Sidenav.propTypes = {

@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "aaronsichone-36d8b",
+    "reservation": "aaronsichone-36d8b"
+  },
+  "targets": {
+    "aaronsichone-36d8b": {
+      "hosting": {
+        "Reservation": [
+          "reservation-b11"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
